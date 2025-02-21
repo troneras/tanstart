@@ -8,5 +8,9 @@ export default defineConfig({
                 projects: ['./tsconfig.json'],
             }),
         ],
+        assetsInclude: ['**/*.woff2'],
+        build: {
+            assetsDir: 'assets'
+        }
     },
 })

@@ -3,6 +3,7 @@ import * as fs from 'node:fs'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/start'
 import { Button } from '@/components/ui/button'
+import { LoginForm } from '@/components/login-form'
 
 const filePath = 'count.txt'
 
@@ -30,19 +31,30 @@ export const Route = createFileRoute('/')({
     loader: async () => await getCount(),
 })
 
-function Home() {
-    const router = useRouter()
-    const state = Route.useLoaderData()
 
+function Home() {
     return (
-        <Button
-            onClick={() => {
-                updateCount({ data: 1 }).then(() => {
-                    router.invalidate()
-                })
-            }}
-        >
-            Add 1 to {state}?
-        </Button>
+        <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+            <div className="w-full max-w-sm">
+                <LoginForm />
+            </div>
+        </div>
     )
 }
+
+// function Home() {
+//     const router = useRouter()
+//     const state = Route.useLoaderData()
+
+//     return (
+//         <Button
+//             onClick={() => {
+//                 updateCount({ data: 1 }).then(() => {
+//                     router.invalidate()
+//                 })
+//             }}
+//         >
+//             Add 1 to {state}?
+//         </Button>
+//     )
+// }

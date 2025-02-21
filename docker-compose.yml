@@ -1,0 +1,36 @@
+version: "3.9"
+services:
+  tanstack-starter-kit-db:
+    image: postgres
+    restart: always
+    container_name: tanstack-starter-kit-db
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: example
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+
+  s3-bucket:
+    build: .
+    restart: always
+    ports:
+      - 9000:9000
+    command: "bun s3.mjs"
+    environment:
+      AWS_ACCESS_KEY_ID: S3RVER
+      AWS_SECRET_ACCESS_KEY: S3RVER
+    volumes:
+      - ".:/home/app"
+
+  mailhog:
+    image: mailhog/mailhog
+    restart: always
+    ports:
+      - 1025:1025   # SMTP server port
+      - 8025:8025   # Web interface port
+    container_name: tanstack-starter-kit-mailhog
+
+volumes:
+  postgres:
