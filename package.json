@@ -3,7 +3,9 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "vinxi dev",
+    "dev": "concurrently \"vinxi dev\" \"graphql-codegen --require dotenv/config --config codegen.ts --watch\"",
+    "dev:app": "vinxi dev",
+    "dev:codegen": "graphql-codegen --require dotenv/config --config codegen.ts --watch",
     "build": "vinxi build",
     "start": "vinxi start",
     "db:push": "drizzle-kit push --config=drizzle.config.ts",
@@ -13,15 +15,18 @@
     "db:studio": "drizzle-kit studio",
     "db:clear": "bun ./app/db/clear.ts",
     "db:seed": "bun ./app/db/seed.ts",
-    "db:reset": "bun ./app/db/clear.ts && bun ./app/db/migrate.ts && bun ./app/db/seed.ts"
+    "db:reset": "bun ./app/db/clear.ts && bun ./app/db/migrate.ts && bun ./app/db/seed.ts",
+    "codegen": "graphql-codegen --require dotenv/config --config codegen.ts"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.5",
     "@tanstack/router-devtools": "^1.109.2",
     "@types/bun": "latest",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react": "^4.3.4",
     "bun-types": "^1.2.2",
+    "concurrently": "^9.1.2",
     "drizzle-kit": "^0.30.4",
     "s3rver": "^3.7.1",
     "vite-tsconfig-paths": "^5.1.4"

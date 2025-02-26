@@ -1,5 +1,12 @@
 # Based on https://raw.githubusercontent.com/github/gitignore/main/Node.gitignore
 
+# codegen
+app/data-access/gql/fragment-masking.ts
+app/data-access/gql/gql.ts
+app/data-access/gql/graphql.ts
+app/data-access/gql/index.ts
+
+
 # Logs
 
 logs
