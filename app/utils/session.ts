@@ -3,6 +3,10 @@
 // import { AuthenticationError } from "@/use-cases/errors";
 // import { getCookie, setCookie } from "vinxi/http";
 
+import { getSession } from "@/data-access/sessions"
+import { createAppSession, validateRequest } from "./auth"
+import type { Session } from "drizzle/types";
+
 // const SESSION_COOKIE_NAME = "session";
 
 // export async function setSessionTokenCookie(
@@ -51,3 +55,10 @@
 //   const session = await createSession(token, userId);
 //   await setSessionTokenCookie(token, session.expiresAt);
 // }
+
+
+
+export const getCurrentUser = async () => {
+    const { user } = await validateRequest();
+    return user ?? undefined;
+}

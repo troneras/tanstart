@@ -9,28 +9,40 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import type React from "react"
 
-export function LoginForm({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+export function AuthForm({
+  actionText,
+  onSubmit,
+  status,
+  afterSubmit
+}: {
+  actionText: string,
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void,
+  status: 'pending' | 'idle' | 'success' | 'error',
+  afterSubmit?: React.ReactNode
+}) {
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div className="flex flex-col gap-6">
       <Card>
         <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
+          <CardTitle>{actionText}</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Enter your email below to {actionText === 'Login' ? 'login to' : 'register'} your account
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
-            <div className="flex flex-col gap-6">
+          <form onSubmit={(e) => {
+            e.preventDefault()
+            onSubmit(e)
+          }}>
+            <div className="flex flex-col gap-6 pb-6">
               <div className="grid gap-3">
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
                   type="email"
+                  name="email"
                   placeholder="m@example.com"
                   required
                 />
@@ -45,22 +57,16 @@ export function LoginForm({
                     Forgot your password?
                   </a>
                 </div>
-                <Input id="password" type="password" required />
+                <Input id="password" type="password" name="password" required />
               </div>
               <div className="flex flex-col gap-3">
                 <Button type="submit" className="w-full">
-                  Login
+                  {status === 'pending' ? '...' : actionText}
                 </Button>
                 <Button variant="outline" className="w-full">
-                  Login with Google
+                  {status === 'pending' ? '...' : actionText} with Google
                 </Button>
               </div>
-            </div>
-            <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{" "}
-              <a href="#" className="underline underline-offset-4">
-                Sign up
-              </a>
             </div>
           </form>
         </CardContent>

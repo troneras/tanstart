@@ -1,120 +1,99 @@
-// import { Google } from "arctic";
-// import { database } from "@/db";
-// import {
-//   encodeBase32LowerCaseNoPadding,
-//   encodeHexLowerCase,
-// } from "@oslojs/encoding";
-// import { Session, sessions, User, users } from "@/db/schema";
-// import { eq } from "drizzle-orm";
-// import { sha256 } from "@oslojs/crypto/sha2";
-// import { env } from "./env";
-// import { UserId } from "@/use-cases/types";
-// import { getSessionToken } from "./session";
+import { createSession, deleteSession, getSession, updateSessionExpiration } from "@/data-access/sessions";
+import { getUserById } from "@/data-access/user";
+import type { UserId } from "@/use-cases/types";
+import { clearSession, useSession } from '@tanstack/start/server'
+import type { User } from 'drizzle/types'
 
-// const SESSION_REFRESH_INTERVAL_MS = 1000 * 60 * 60 * 24 * 15;
-// const SESSION_MAX_DURATION_MS = SESSION_REFRESH_INTERVAL_MS * 2;
+type SessionUser = {
+    userEmail: User['email']
+}
+const SESSION_COOKIE_NAME = 'APP_Cookie';
+const SESSION_REFRESH_INTERVAL_MS = 15 * 24 * 60 * 60 * 1000;
+const SESSION_MAX_DURATION_MS = SESSION_REFRESH_INTERVAL_MS * 2;
 
-// export const googleAuth = new Google(
-//   env.GOOGLE_CLIENT_ID,
-//   env.GOOGLE_CLIENT_SECRET,
-//   `${env.HOST_NAME}/api/login/google/callback`
-// );
 
-// export function generateSessionToken(): string {
-//   const bytes = new Uint8Array(20);
-//   crypto.getRandomValues(bytes);
-//   const token = encodeBase32LowerCaseNoPadding(bytes);
-//   return token;
-// }
+export const createAppSession = async (userId?: UserId) => {
+    // create a session
+    const session = await useSession<SessionUser>({
+        name: SESSION_COOKIE_NAME,
+        password: 'vj5x@Msr^k9uuVvrhFt2&rhogB^%23jqCkV8qgTCqNvtq@nEi9Ehce896nbi#wsFh',
+        cookie: {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            // 1y
+            maxAge: 365 * 24 * 60 * 60,
+            path: '/'
+        }
+    })
 
-// export async function createSession(
-//   token: string,
-//   userId: UserId
-// ): Promise<Session> {
-//   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
-//   const session: Session = {
-//     id: sessionId,
-//     userId,
-//     expiresAt: new Date(Date.now() + SESSION_MAX_DURATION_MS),
-//   };
-//   await database.insert(sessions).values(session);
-//   return session;
-// }
+    // store the session
+    if (userId && session.id) {
+        const expiresAt = new Date(Date.now() + SESSION_MAX_DURATION_MS);
+        await createSession(session.id, userId, expiresAt)
+    }
 
-// export async function validateRequest(): Promise<SessionValidationResult> {
-//   const sessionToken = await getSessionToken();
-//   if (!sessionToken) {
-//     return { session: null, user: null };
-//   }
-//   return validateSessionToken(sessionToken);
-// }
+    return session
+}
 
-// export async function getAuthenticatedUser(): Promise<User | null> {
-//   const sessionToken = await getSessionToken();
-//   if (!sessionToken) {
-//     return null;
-//   }
-//   const { user } = await validateSessionToken(sessionToken);
-//   return user;
-// }
 
-// export async function isAuthenticated(): Promise<boolean> {
-//   const sessionToken = await getSessionToken();
-//   if (!sessionToken) {
-//     return false;
-//   }
-//   const { user } = await validateSessionToken(sessionToken);
-//   return !!user;
-// }
+export const verifyPassword = async (password: string, hash: string) => {
+    // algorithm is inferred from the hash by Bun
+    const verified = Bun.password.verify(password, hash)
 
-// export async function validateSessionToken(
-//   token: string
-// ): Promise<SessionValidationResult> {
-//   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
-//   const sessionInDb = await database.query.sessions.findFirst({
-//     where: eq(sessions.id, sessionId),
-//   });
-//   if (!sessionInDb) {
-//     return { session: null, user: null };
-//   }
-//   if (Date.now() >= sessionInDb.expiresAt.getTime()) {
-//     await database.delete(sessions).where(eq(sessions.id, sessionInDb.id));
-//     return { session: null, user: null };
-//   }
+    return verified;
+}
 
-//   const user = await database.query.users.findFirst({
-//     where: eq(users.id, sessionInDb.userId),
-//   });
+export const hashPassword = async (password: string) => {
+    return Bun.password.hash(password, "bcrypt")
+}
 
-//   if (!user) {
-//     await database.delete(sessions).where(eq(sessions.id, sessionInDb.id));
-//     return { session: null, user: null };
-//   }
+export const validateRequest = async () => {
+    const sessionManager = await createAppSession()
 
-//   if (
-//     Date.now() >=
-//     sessionInDb.expiresAt.getTime() - SESSION_REFRESH_INTERVAL_MS
-//   ) {
-//     sessionInDb.expiresAt = new Date(Date.now() + SESSION_MAX_DURATION_MS);
-//     await database
-//       .update(sessions)
-//       .set({
-//         expiresAt: sessionInDb.expiresAt,
-//       })
-//       .where(eq(sessions.id, sessionInDb.id));
-//   }
+    if (!sessionManager.id) {
+        return { session: null, user: null };
+    }
 
-//   return { session: sessionInDb, user };
-// }
+    return await validateSessionToken(sessionManager.id) 
+}
 
-// export async function invalidateSession(sessionId: string): Promise<void> {
-//   await database.delete(sessions).where(eq(sessions.id, sessionId));
-// }
+export const clearCookie = async () => {
+    const sessionManager = await createAppSession()
+    sessionManager.clear(); 
+}
 
-// export async function invalidateUserSessions(userId: UserId): Promise<void> {
-//   await database.delete(sessions).where(eq(users.id, userId));
-// }
+export const validateSessionToken = async (token: string) => {
+    const sessionInDb = await getSession(token);
+    if (!sessionInDb || !sessionInDb.userId) {
+        return { session: null, user: null };
+    }
+    if (Date.now() >= sessionInDb.expiresAt.getTime()) {
+        return { session: null, user: null };
+    }
 
-// export type SessionValidationResult =
-//   | { session: Session; user: User }
-//   | { session: null; user: null };
+    const user = await getUserById(sessionInDb.userId)
+    if (!user) {
+        await deleteSession(token)
+        return { session: null, user: null };
+    }
+
+    if (Date.now() >= sessionInDb.expiresAt.getTime() - SESSION_REFRESH_INTERVAL_MS) {
+        sessionInDb.expiresAt = new Date(Date.now() + SESSION_MAX_DURATION_MS)
+        await updateSessionExpiration(sessionInDb.id, sessionInDb.expiresAt)
+    }
+
+    return { session: sessionInDb, user };
+}
+
+export const invalidateSession = async () => {
+    const {session} = await validateRequest()
+
+    if (!session) {
+        return
+    }
+
+    await deleteSession(session.id)
+    await clearCookie()
+}
+

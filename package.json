@@ -7,6 +7,7 @@
     "build": "vinxi build",
     "start": "vinxi start",
     "db:push": "drizzle-kit push --config=drizzle.config.ts",
+    "db:pull": "drizzle-kit pull --config=drizzle.config.ts",
     "db:migrate": "bun ./app/db/migrate.ts",
     "db:generate": "drizzle-kit generate --config=drizzle.config.ts",
     "db:studio": "drizzle-kit studio",
@@ -39,13 +40,16 @@
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.39.3",
     "lucide-react": "^0.475.0",
+    "next-themes": "^0.4.4",
     "pg": "^8.13.3",
     "postcss": "^8.5.3",
     "react": "^19.0.0-rc.1",
     "react-dom": "^19.0.0-rc.1",
+    "sonner": "^2.0.1",
     "tailwind-merge": "^3.0.1",
     "tailwindcss": "^4.0.8",
     "tailwindcss-animate": "^1.0.7",
-    "vinxi": "^0.5.3"
+    "vinxi": "^0.5.3",
+    "zod": "^3.24.2"
   }
 }

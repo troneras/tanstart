@@ -2,8 +2,7 @@
 import * as fs from 'node:fs'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/start'
-import { Button } from '@/components/ui/button'
-import { LoginForm } from '@/components/login-form'
+
 
 const filePath = 'count.txt'
 
@@ -36,7 +35,7 @@ function Home() {
     return (
         <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
             <div className="w-full max-w-sm">
-                <LoginForm />
+                hola
             </div>
         </div>
     )

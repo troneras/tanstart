@@ -7,8 +7,22 @@ import {
     Scripts,
 } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
+import { Toaster } from "@/components/ui/sonner"
 
 import appCss from "@/styles/app.css?url"
+import { getCurrentUser } from '@/utils/session'
+import { createServerFn } from '@tanstack/start'
+import { DefaultCatchBoundary } from '@/components/DefaultCatchBoundary'
+
+const fetchUser = createServerFn({ method: 'GET' }).handler(async () => {
+    // We need to auth on the server so we have access to secure cookies
+    const user = await getCurrentUser()
+
+    return {
+        user
+    }
+})
+
 
 export const Route = createRootRoute({
     head: () => ({
@@ -50,6 +64,21 @@ export const Route = createRootRoute({
         ],
     }),
     component: RootComponent,
+    errorComponent: (props) => {
+        return (
+            <RootDocument>
+                <DefaultCatchBoundary {...props} />
+            </RootDocument>
+        )
+    },
+
+    beforeLoad: async () => {
+        const { user } = await fetchUser()
+
+        return {
+            user
+        }
+    }
 })
 
 function RootComponent() {
@@ -63,12 +92,13 @@ function RootComponent() {
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
     return (
-        <html>
+        <html lang="en">
             <head>
                 <HeadContent />
             </head>
-            <body>
+            <body className='h-screen overflow-hidden'>
                 {children}
+                <Toaster />
                 <Scripts />
             </body>
         </html>
