@@ -28,6 +28,14 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./app/*"]
-    }
+    },
+
+    "plugins": [ 
+      { 
+        "name": "gql.tada/ts-plugin", 
+        "schema": "https://eu-west-2.cdn.hygraph.com/content/cm7khvq9q022b07wb1mphv5e0/master", 
+        "tadaOutputLocation": "./app/lib/gql/graphql-env.d.ts"
+      } 
+    ] 
   }
 }

@@ -3,9 +3,8 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"vinxi dev\" \"graphql-codegen --require dotenv/config --config codegen.ts --watch\"",
+    "dev": "vinxi dev",
     "dev:app": "vinxi dev",
-    "dev:codegen": "graphql-codegen --require dotenv/config --config codegen.ts --watch",
     "build": "vinxi build",
     "start": "vinxi start",
     "db:push": "drizzle-kit push --config=drizzle.config.ts",
@@ -15,11 +14,9 @@
     "db:studio": "drizzle-kit studio",
     "db:clear": "bun ./app/db/clear.ts",
     "db:seed": "bun ./app/db/seed.ts",
-    "db:reset": "bun ./app/db/clear.ts && bun ./app/db/migrate.ts && bun ./app/db/seed.ts",
-    "codegen": "graphql-codegen --require dotenv/config --config codegen.ts"
+    "db:reset": "bun ./app/db/clear.ts && bun ./app/db/migrate.ts && bun ./app/db/seed.ts"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "^5.0.5",
     "@tanstack/router-devtools": "^1.109.2",
     "@types/bun": "latest",
     "@types/react": "^19.0.10",
@@ -35,6 +32,7 @@
     "typescript": "^5.7.3"
   },
   "dependencies": {
+    "@apollo/client": "^3.13.1",
     "@radix-ui/react-label": "^2.1.2",
     "@radix-ui/react-slot": "^1.1.2",
     "@tailwindcss/postcss": "^4.0.8",
@@ -47,8 +45,8 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.39.3",
+    "gql.tada": "^1.8.10",
     "graphql": "^16.10.0",
-    "graphql-request": "^7.1.2",
     "lucide-react": "^0.475.0",
     "next-themes": "^0.4.4",
     "pg": "^8.13.3",

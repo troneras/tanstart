@@ -1,0 +1,6 @@
+schema: 'schema.graphql'
+documents: 'app/**/*.{ts,tsx}'
+extensions:
+  endpoints:
+    default:
+      url: 'YOUR_HYGRAPH_API_ENDPOINT' 

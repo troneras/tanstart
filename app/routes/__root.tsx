@@ -16,9 +16,11 @@ import { createServerFn } from '@tanstack/start'
 import { DefaultCatchBoundary } from '@/components/DefaultCatchBoundary'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import type { QueryClient } from '@tanstack/react-query'
+import { useSuspenseQuery, type QueryClient } from '@tanstack/react-query'
 import { seo } from '@/utils/seo'
 import { NotFound } from '@/components/NotFound'
+import { configQueryOptions } from '@/utils/config'
+import { type Brand } from '@/data-access/config'
 
 const fetchUser = createServerFn({ method: 'GET' }).handler(async () => {
     // We need to auth on the server so we have access to secure cookies
@@ -28,7 +30,6 @@ const fetchUser = createServerFn({ method: 'GET' }).handler(async () => {
         user
     }
 })
-
 
 export const Route = createRootRouteWithContext<{
     queryClient: QueryClient
@@ -83,12 +84,16 @@ export const Route = createRootRouteWithContext<{
     notFoundComponent: () => <NotFound />,
     component: RootComponent,
 
-    beforeLoad: async () => {
+    beforeLoad: async ({ context }) => {
         const { user } = await fetchUser()
 
         return {
-            user
+            user,
+            brand: "mrvegas" as Brand
         }
+    },
+    loader: async ({ context }) => {
+        await context.queryClient.ensureQueryData(configQueryOptions(context.brand))
     }
 })
 

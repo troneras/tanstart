@@ -1,3 +1,23 @@
+import { getSiteConfig } from "./app/data-access/config";
+import { type FragmentOf } from "@/lib/graphql";
+import { getGlobalTranslations, translationsTypesFragment } from "./app/data-access/translations";
+import { readFragment } from "gql.tada";
+
+// const result = await getGlobalTranslations(["en"])
+// if (!result) throw new Error("No translations found")
+// const translations = readFragment(translationsTypesFragment, result)
+
+// console.log(translations.searchGames);
+
+const result = await getSiteConfig("mrvegas")
+if (!result) throw new Error("No config found")
+
+console.log(result);
+
+process.exit(0);
+
+
+
 import { createUser, deleteUser, getUserByEmail, updateUser, verifyEmail } from "./app/data-access/user";
 
 // const user = await createUser("test@test.com", await Bun.password.hash("password", "bcrypt"));
