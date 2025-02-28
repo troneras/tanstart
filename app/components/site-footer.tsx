@@ -82,7 +82,7 @@ const AboutSection = () => (
 
 // Footer links section component
 const FooterLinksSection = () => (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {footerContent.links.map((link, index) => (
             <div key={index} className="flex justify-between items-center bg-secondary p-4 rounded-2xl">
                 <h4 className="font-medium text-foreground">{link.title}</h4>
@@ -134,7 +134,7 @@ const Copyright = () => (
 // Main footer component
 export default function SiteFooter() {
     return (
-        <footer className="bg-card text-card-foreground border-t">
+        <footer className="bg-card text-card-foreground border-t mx-0 px-0">
             {/* Main footer content */}
             <div className="container mx-auto px-4 py-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
