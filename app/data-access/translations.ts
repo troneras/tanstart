@@ -1,4 +1,4 @@
-import { graphql, type FragmentOf } from "@/lib/graphql"
+import { graphql, readFragment, type FragmentOf } from "@/lib/graphql"
 import fetchGraphQL from "@/lib/hygraphClient"
 
 // TODO this should be inferred from the hygraph config
@@ -17,7 +17,7 @@ fragment Translations on GlobalTranslations {
     withdraw
 }
 `)
-
+export type GlobalTranslationsFragment = FragmentOf<typeof translationsTypesFragment>
 
 export const getGlobalTranslationsQuery = graphql(`
 query getGlobalTranslations($locales: [Locale!]!) {
@@ -35,13 +35,12 @@ export const getGlobalTranslations = async (locales: Locale[]) => {
     const data = await fetchGraphQL(getGlobalTranslationsQuery, {
         locales
     })
-    const translations = data.translationsSingleton?.translations
+    // This ensures the type system knows we have a valid fragment
+    const translations = data.translationsSingleton?.translations as GlobalTranslationsFragment
     if (!translations) throw new Error("Invalid translations")
 
-    // This ensures the type system knows we have a valid fragment
-    return translations as GlobalTranslations
+    return readFragment(translationsTypesFragment, translations)
 }
 
 
 
-export type GlobalTranslations = FragmentOf<typeof translationsTypesFragment>

@@ -20,7 +20,7 @@ type ThemeProviderState = {
 const THEME_COOKIE_NAME = "ui-theme";
 
 const initialState: ThemeProviderState = {
-    theme: "system",
+    theme: "dark",
     setTheme: () => null,
 };
 
@@ -28,7 +28,7 @@ const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
 
 export const getThemeFn = createServerFn().handler(async () => {
     const theme = getCookie(THEME_COOKIE_NAME);
-    return theme ?? "system";
+    return theme ?? "dark";
 });
 
 export const setThemeFn = createServerFn({ method: "POST" })

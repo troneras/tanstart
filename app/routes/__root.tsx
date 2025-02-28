@@ -89,7 +89,7 @@ export const Route = createRootRouteWithContext<{
 
         return {
             user,
-            brand: "mrvegas" as Brand
+            brand: "mrvegas" as Brand // TODO: this should be defined in the headers of the request
         }
     },
     loader: async ({ context }) => {
@@ -129,7 +129,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             </head>
             <body className="h-screen">
                 <ThemeProvider>
-                    <div className="h-[calc(100vh-64px)] mt-16">{children}</div>
+                    {children}
                     <TanStackRouterDevtools position="bottom-right" />
                     <ReactQueryDevtools buttonPosition="bottom-left" />
                     <Toaster />
