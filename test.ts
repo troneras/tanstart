@@ -9,7 +9,7 @@ import { readFragment } from "gql.tada";
 
 // console.log(translations.searchGames);
 
-const result = await getSiteConfig("mrvegas")
+const result = await getSiteConfig("brand_alpha")
 if (!result) throw new Error("No config found")
 
 console.log(result);

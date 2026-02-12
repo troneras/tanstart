@@ -5,7 +5,7 @@ import { cn } from "../lib/utils";
 // This will make it easier to replace with CMS data later
 const footerContent = {
     about: {
-        title: "About Mr Vegas Casino",
+        title: "About Our Casino",
         paragraphs: [
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla dapibus mauris elit, nec elementum risus blandit quis. Nam vel nisl in felis aliquet volutpat. Integer vitae consequat massa. Etiam id enim magna. Phasellus porta aliquam risus vitae pellentesque. Donec blandit viverra ex a lacinia. Curabitur ornare sollicitudin mauris vel maximus. Pellentesque nec odio dictum, auctor orci vitae, facilisis nibh.",
             "Integer a orci cursus, tempus eros interdum, rutrum purus. Proin maximus urna in mauris iaculis, ut auctor ligula eleifend. Cras ipsum sem, rhoncus ac bibendum at, lacinia in sapien. Cras malesuada placerat libero sed imperdiet. Ut non purus eget enim lacinia luctus."
@@ -20,7 +20,7 @@ const footerContent = {
         { title: "FAQs", path: "/" }
     ],
     legal: {
-        text: "This website mrvegas.com is operated in Denmark and Greenland, and the United Kingdom, by Videoslots Limited, a Malta based company, with registration number C49090, and registered address at the Space, Level 2 & 3, Alfred Craig Street, Pieta, PTA 1320 Malta, licensed and regulated by the Spillemyndigheden (the Danish Gambling Authority) under license number 18-0650512, valid until and including the 29th August 2024, and the Great Britain Gambling Commission in the United Kingdom under license number 39380. This website mrvegas.com is operated in Sweden, and other jurisdictions not aforementioned, by Mr Vegas Limited, a Malta based company, with registration number C93203, and registered address at the Space, Level 2 & 3, Alfred Craig Street, Pieta, PTA 1320 Malta. Mr Vegas Limited is licensed and regulated by the Spelinspektionen (the Swedish Gambling Authority), under license number 20-08254, issued on the 29th of January 2026, and by the Malta Gaming Authority under license number MGA/CRP/258/2014/01, issued on the 19th of May 2020."
+        text: "This is a demo application. In production, this section would contain the legal information and licensing details for the specific brand, fetched from the CMS."
     },
     logos: {
         row1: [
@@ -38,7 +38,7 @@ const footerContent = {
         text: "Gambling can be addictive. Play responsibly."
     },
     copyright: {
-        text: "© MrVegas.com 2011 - 2023."
+        text: "© TanStart Demo 2024."
     }
 };
 

@@ -3,7 +3,7 @@ import fetchGraphQL from "@/lib/hygraphClient"
 import { readFragment } from "gql.tada"
 
 
-export type Brand = "mrvegas" | "videoslots" | "dbet" | "kungaslottet" | "mr"
+export type Brand = "brand_alpha" | "brand_beta" | "brand_gamma" | "brand_delta" | "brand_epsilon"
 
 const licenseConfigFragment = graphql(`
     fragment LicenseConfig on LicenseConfig {
@@ -44,6 +44,8 @@ export const getSiteConfig = async (brand: Brand) => {
         ...data.brandConfig,
         availableLicenses: data.brandConfig.availableLicenses.map(license => readFragment(licenseConfigFragment, license))
     }
+    // Types are automatically inferred from the query and remote graphql schema
+    console.log(config)
 
     return config
 }

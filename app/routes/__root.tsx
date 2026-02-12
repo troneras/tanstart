@@ -89,7 +89,7 @@ export const Route = createRootRouteWithContext<{
 
         return {
             user,
-            brand: "mrvegas" as Brand // TODO: this should be defined in the headers of the request
+            brand: "brand_alpha" as Brand // TODO: this should be defined in the headers of the request
         }
     },
     loader: async ({ context }) => {

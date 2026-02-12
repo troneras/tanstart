@@ -2,12 +2,12 @@ import * as React from 'react';
 import { useConfig } from '@/hooks/useConfig';
 import { Icons } from './icons';
 import { useSidebar } from '@/components/ui/sidebar';
-interface HeaderProps {
-    onMenuToggle?: () => void;
-}
 
-export function SiteHeader({ onMenuToggle }: HeaderProps) {
-    const { data: config } = useConfig("mrvegas");
+
+export function SiteHeader() {
+    const { data: config } = useConfig("brand_alpha"); // this is for a demo, the brand would come from server context
+
+    const brand = config.brand;
 
     const { toggleSidebar } = useSidebar();
 
