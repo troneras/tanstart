@@ -1,6 +1,7 @@
 import type { TadaDocumentNode } from 'gql.tada';
 import { print } from 'graphql';
-const url = process.env.HYGRAPH_CONTENT_API_URL ?? 'https://eu-west-2.cdn.hygraph.com/content/cm7khvq9q022b07wb1mphv5e0/master';
+const url = process.env.HYGRAPH_CONTENT_API_URL;
+if (!url) throw new Error("HYGRAPH_CONTENT_API_URL environment variable is required");
 
 const fetchGraphQL = async <TData, TVariables>(
   document: TadaDocumentNode<TData, TVariables>,

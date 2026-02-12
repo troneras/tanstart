@@ -76,7 +76,7 @@ Create a `.env` file:
 
 ```env
 DATABASE_URL=postgres://user:password@localhost:5432/tanstart
-HYGRAPH_API_URL=<your-hygraph-endpoint>
+HYGRAPH_CONTENT_API_URL=<your-hygraph-content-api-endpoint>
 ```
 
 ### GraphQL Codegen
